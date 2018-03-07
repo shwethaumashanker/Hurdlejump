@@ -17,8 +17,13 @@ var myObstacles = [];
 var myScore;
 
 function startGame() {
+<<<<<<< HEAD
     myGamePiece = new component(30, 30, "red", 10, 120);
     myGamePiece.gravity = 0.05;
+=======
+    myGamePiece = new component(30, 30, "blue", 10, 120);
+    myGamePiece.gravity = 0.5;
+>>>>>>> 73f60acf4d91858691d5d7ebaea2b4b26017e3b5
     myScore = new component("30px", "Consolas", "black", 280, 40, "text");
     myGameArea.start();
 }
