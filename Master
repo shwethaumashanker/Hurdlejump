@@ -78,7 +78,7 @@ function updateGameArea() {
 }
 
 function move(dir) {
-    myGamePiece.image.src = "jumping sheep.gif";
+    myGamePiece.image.src = "sheep.gif";
     if (dir == "up") {myGamePiece.speedY = -1; }
     if (dir == "down") {myGamePiece.speedY = 1; }
     if (dir == "left") {myGamePiece.speedX = -1; }
