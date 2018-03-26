@@ -16,10 +16,8 @@ var myGamePiece;
 var myBackground;
 
 function startGame() {
-    myGamePiece = new component(30, 30, "sheep.gif", 10, 120, "image");
-
-
-
+    myGamePiece = new component(50, 60, "sheep.gif", 10, 155, "image");
+    myBackground = new component(656, 270, "8-bit-nature-lu.jpg", 0, 0, "image");
     myGameArea.start();
 }
 
