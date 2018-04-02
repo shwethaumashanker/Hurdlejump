@@ -14,10 +14,14 @@ canvas {
 
 var myGamePiece;
 var myBackground;
+var myObstacles = [];
 
 function startGame() {
-    myGamePiece = new component(30, 30, "sheep.gif", 10, 120, "image");
-    myBackground = new component(656, 270, "8-bit-nature-lu.jpg", 0, 0, "image");
+
+    myGamePiece = new component(50, 60, "sheep.gif", 10, 155, "image");
+     myObstacle = new component(10, 200, "white", 300, 120);
+    myBackground = new component(656, 270, "8-bit-nature-lu.jpg", 0, 0, "background");
+
     myGameArea.start();
 }
 
@@ -39,9 +43,14 @@ var myGameArea = {
     }
 }
 
+function everyinterval(n) {
+    if ((myGameArea.frameNo / n) % 1 == 0) {return true;}
+    return false;
+}
+
 function component(width, height, color, x, y, type) {
     this.type = type;
-    if (type == "image") {
+    if (type == "image" || type == "background") {
         this.image = new Image();
         this.image.src = color;
     }
@@ -53,11 +62,17 @@ function component(width, height, color, x, y, type) {
     this.y = y;
     this.update = function() {
         ctx = myGameArea.context;
-        if (type == "image") {
+        if (type == "image" || type == "background") {
             ctx.drawImage(this.image,
                 this.x,
                 this.y,
                 this.width, this.height);
+                if (type == "background") {
+           ctx.drawImage(this.image,
+               this.x + this.width,
+               this.y,
+               this.width, this.height);
+       }
         } else {
             ctx.fillStyle = color;
             ctx.fillRect(this.x, this.y, this.width, this.height);
@@ -66,16 +81,73 @@ function component(width, height, color, x, y, type) {
     this.newPos = function() {
         this.x += this.speedX;
         this.y += this.speedY;
+        if (this.type == "background") {
+          if (this.x == -(this.width)) {
+              this.x = 0;
+          }
+      }
     }
+    this.crashWith = function(otherobj) {
+        var myleft = this.x;
+        var myright = this.x + (this.width);
+        var mytop = this.y;
+        var mybottom = this.y + (this.height);
+        var otherleft = otherobj.x;
+        var otherright = otherobj.x + (otherobj.width);
+        var othertop = otherobj.y;
+        var otherbottom = otherobj.y + (otherobj.height);
+        var crash = true;
+        if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)) {
+            crash = false;
+        }
+        return crash;
+    }
+
 }
 
 function updateGameArea() {
+  var x, y;
+    for (i = 0; i < myObstacles.length; i += 1) {
+        if (myGamePiece.crashWith(myObstacles[i])) {
+            myGameArea.stop();
+            return;
+        }
+    }
     myGameArea.clear();
+    myGameArea.frameNo += 1;
+    if (myGameArea.frameNo == 1 || everyinterval(200)) {
+        x = myGameArea.canvas.width;
+        minHeight = 150;
+        maxHeight = 200;
+        height = Math.floor(Math.random()*(maxHeight-minHeight+1)+minHeight);
+        //minGap = 100;
+        //maxGap = 200;
+        //gap = Math.floor(Math.random()*(maxGap-minGap+1)+minGap);
+        //myObstacles.push(new component(10, height, "white", x, 0));
+        myObstacles.push(new component(10, x - height , "white", x, height ));
+    }
+
+    myBackground.speedX = -1;
     myBackground.newPos();
     myBackground.update();
-    myGamePiece.newPos();
-    myGamePiece.update();
+    for (i = 0; i < myObstacles.length; i += 1) {
+        myObstacles[i].x += -1;
+        myObstacles[i].update();
+    }
+  //myGameArea.clear();
+  //myBackground.speedX = -1;
+  //myBackground.newPos();
+  //myBackground.update();
+  //myObstacle.x += -1;
+  //myObstacle.update();
+
+  myGamePiece.newPos();
+  myGamePiece.update();
 }
+
+
+
+
 
 function move(dir) {
     myGamePiece.image.src = "jumping sheep.gif";
