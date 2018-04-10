@@ -83,14 +83,20 @@ function component(width, height, color, x, y, type) {
       }
     }
     this.hitBottom();
+    //this.hitTop();
   }
   this.hitBottom = function(){
-    var rockbottom = myGameArea.canvas.height - this.height;
-    if(this.y > rockbottom){
-      this.y = rockbottom;
-      this.gravitySpeed = 0
+    //var rockbottom = myGameArea.canvas.height - this.height;
+    if(this.y > 155){
+      this.y = 155;
+      this.gravitySpeed = 0;
     }
   }
+  /*this.hitTop = function(){
+    if(this.y <= 50){
+      myGamePiece.gravity = 0.9;
+    }
+  }*/
 }
 
 function updateGameArea() {
@@ -99,20 +105,21 @@ function updateGameArea() {
   myBackground.speedX = -1;
   myBackground.newPos();
   myBackground.update();
-  myGamePiece.gravity = 0.05;
+  myGamePiece.gravity = 0.5;
   //myGamePiece.speedX = 0;
   //myGamePiece.speedY = 0;
   if (myGameArea.key && myGameArea.key == 32) {
-    moveup();
+    moveup(this.y);
   }
   myGamePiece.newPos();
   myGamePiece.update();
 }
 
-function moveup(){
+function moveup(y){
   myGamePiece.image.src = "jumping sheep.gif";
 //  myGamePiece.speedY = -1;
-  accelerate(-0.02);
+  accelerate(-0.9);
+  
 }
 
 function accelerate(n){
@@ -121,20 +128,6 @@ function accelerate(n){
   }
   myGamePiece.gravity = n;
 }
-
-/*function move(dir) {
-    myGamePiece.image.src = "jumping sheep.gif";
-    if (dir == "up") {myGamePiece.speedY = -1; }
-    if (dir == "down") {myGamePiece.speedY = 1; }
-    if (dir == "left") {myGamePiece.speedX = -1; }
-    if (dir == "right") {myGamePiece.speedX = 1; }
-}
-
-function clearmove() {
-    myGamePiece.image.src = "sheep.gif";
-    myGamePiece.speedX = 0;
-    myGamePiece.speedY = 0;
-}*/
 
 </script>
 <!--<div style="text-align:center;width:480px;">
