@@ -86,7 +86,6 @@ function component(width, height, color, x, y, type) {
     this.hitTop();
   }
   this.hitBottom = function(){
-    //var rockbottom = myGameArea.canvas.height - this.height;
     if(this.y > 155){
       this.y = 155;
       this.gravitySpeed = 0;
@@ -107,8 +106,6 @@ function updateGameArea() {
   myBackground.newPos();
   myBackground.update();
   myGamePiece.gravity = 0.5;
-  //myGamePiece.speedX = 0;
-  //myGamePiece.speedY = 0;
   if (myGameArea.key && myGameArea.key == 32) {
     moveup(this.y);
   }
@@ -118,7 +115,6 @@ function updateGameArea() {
 
 function moveup(y){
   myGamePiece.image.src = "jumping sheep.gif";
-//  myGamePiece.speedY = -1;
   accelerate(-0.9);
 
 }
