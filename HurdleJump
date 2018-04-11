@@ -165,17 +165,11 @@ function updateGameArea() {
     myObstacles.push(new component(10, x - height , "white", x, height ));
   }
 
-<<<<<<< HEAD
   myBackground.speedX = -1;
   myBackground.newPos();
   myBackground.update();
   myGamePiece.gravity = 0.6;
-=======
-    myBackground.speedX = -1;
-    myBackground.newPos();
-    myBackground.update();
-    myGamePiece.gravity = .6;
->>>>>>> 927f8597618f17219c27bfc6902383927158bc7a
+
   if (myGameArea.key && myGameArea.key == 32) {
     moveup(this.y);
   }
