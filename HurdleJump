@@ -162,7 +162,7 @@ function updateGameArea() {
     myBackground.speedX = -1;
     myBackground.newPos();
     myBackground.update();
-    myGamePiece.gravity = 0.5;
+    myGamePiece.gravity = .6;
   if (myGameArea.key && myGameArea.key == 32) {
     moveup(this.y);
   }
