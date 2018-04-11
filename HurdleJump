@@ -83,7 +83,7 @@ function component(width, height, color, x, y, type) {
       }
     }
     this.hitBottom();
-    //this.hitTop();
+    this.hitTop();
   }
   this.hitBottom = function(){
     //var rockbottom = myGameArea.canvas.height - this.height;
@@ -92,11 +92,12 @@ function component(width, height, color, x, y, type) {
       this.gravitySpeed = 0;
     }
   }
-  /*this.hitTop = function(){
-    if(this.y <= 50){
-      myGamePiece.gravity = 0.9;
+  this.hitTop = function(){
+    if(this.y <= 0){
+      this.y = 0;
+      myGamePiece.gravity = 1.5;
     }
-  }*/
+  }
 }
 
 function updateGameArea() {
@@ -119,7 +120,7 @@ function moveup(y){
   myGamePiece.image.src = "jumping sheep.gif";
 //  myGamePiece.speedY = -1;
   accelerate(-0.9);
-  
+
 }
 
 function accelerate(n){
