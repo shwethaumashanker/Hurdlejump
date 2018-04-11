@@ -140,7 +140,7 @@ function updateGameArea() {
     if(myGameArea.frameNo<420){
       myScore.text="SCORE: "+0;
     }else{
-    myScore.text="SCORE: " + Math.round(((myGameArea.frameNo+100)/200)-2);
+    myScore.text="SCORE: " + Math.round(((myGameArea.frameNo+50)/200)-2);
   }
     myScore.update();
     for (i = 0; i < myObstacles.length; i += 1) {
