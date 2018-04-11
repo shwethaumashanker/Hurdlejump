@@ -19,6 +19,7 @@ var myObstacles = [];
 function startGame() {
 
     myGamePiece = new component(50, 60, "sheep.gif", 10, 155, "image");
+    myGamePiece.gravity = 0.5;
     myObstacle = new component(10, 200, "white", 300, 120);
     myBackground = new component(656, 270, "8-bit-nature-lu.jpg", 0, 0, "background");
     myScore = new component("30px", "Consolas", "black", 280, 40, "text");
@@ -34,6 +35,12 @@ var myGameArea = {
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.frameNo = 0;
         this.interval = setInterval(updateGameArea, 20);
+    window.addEventListener('keydown', function (e) {
+      myGameArea.key = e.keyCode;
+    })
+    window.addEventListener('keyup', function (e) {
+     myGameArea.key = false;
+    })
         },
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -58,6 +65,8 @@ function component(width, height, color, x, y, type) {
     this.height = height;
     this.speedX = 0;
     this.speedY = 0;
+    this.gravity = 0;
+    this.gravitySpeed = 0;
     this.x = x;
     this.y = y;
     this.update = function() {
@@ -86,14 +95,29 @@ function component(width, height, color, x, y, type) {
         }
     }
     this.newPos = function() {
+      this.gravitySpeed += this.gravity;
         this.x += this.speedX;
-        this.y += this.speedY;
+        this.y += this.speedY + this.gravitySpeed;
         if (this.type == "background") {
           if (this.x == -(this.width)) {
               this.x = 0;
           }
       }
+      this.hitBottom();
+    this.hitTop();
+  }
+  this.hitBottom = function(){
+    if(this.y > 155){
+      this.y = 155;
+      this.gravitySpeed = 0;
     }
+  }
+  this.hitTop = function(){
+    if(this.y <= 0){
+      this.y = 0;
+      myGamePiece.gravity = 1.5;
+    }
+  }
     this.crashWith = function(otherobj) {
         var myleft = this.x;
         var myright = this.x + (this.width);
@@ -121,6 +145,7 @@ function updateGameArea() {
         }
     }
     myGameArea.clear();
+    myGamePiece.image.src = "sheep.gif";
     myGameArea.frameNo += 1;
     if (myGameArea.frameNo == 1 || everyinterval(200)) {
         x = myGameArea.canvas.width;
@@ -137,6 +162,10 @@ function updateGameArea() {
     myBackground.speedX = -1;
     myBackground.newPos();
     myBackground.update();
+    myGamePiece.gravity = 0.5;
+  if (myGameArea.key && myGameArea.key == 32) {
+    moveup(this.y);
+  }
     if(myGameArea.frameNo<420){
       myScore.text="SCORE: "+0;
     }else{
@@ -162,27 +191,21 @@ function updateGameArea() {
 
 
 
-function move(dir) {
-    myGamePiece.image.src = "jumping sheep.gif";
-    if (dir == "up") {myGamePiece.speedY = -1; }
-    if (dir == "down") {myGamePiece.speedY = 1; }
-    if (dir == "left") {myGamePiece.speedX = -1; }
-    if (dir == "right") {myGamePiece.speedX = 1; }
+function moveup(y){
+  myGamePiece.image.src = "jumping sheep.gif";
+  accelerate(-0.9);
+
 }
 
-function clearmove() {
-    myGamePiece.image.src = "sheep.gif";
-    myGamePiece.speedX = 0;
-    myGamePiece.speedY = 0;
+function accelerate(n){
+  if(!myGameArea.interval){
+    myGameArea.interval = setInterval(updateGameArea,20);
+  }
+  myGamePiece.gravity = n;
 }
+
 </script>
-<div style="text-align:center;width:480px;">
-  <button onmousedown="move('up')" onmouseup="clearmove()" ontouchstart="move('up')">UP</button><br><br>
-  <button onmousedown="move('left')" onmouseup="clearmove()" ontouchstart="move('left')">LEFT</button>
-  <button onmousedown="move('right')" onmouseup="clearmove()" ontouchstart="move('right')">RIGHT</button><br><br>
-  <button onmousedown="move('down')" onmouseup="clearmove()" ontouchstart="move('down')">DOWN</button>
-</div>
 
-<p>Update the background before updating other components to make sure the other components are dispalyed on top of the background.</p>
+<p>Use the spacebar to jump and try to get a high score!</p>
 </body>
 </html>
